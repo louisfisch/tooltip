@@ -1,0 +1,44 @@
+@mixin tooltip($side: bottom, $arrow-width: 16px, $position: 50%, $border-width: 2px, $border-color: red, $background-color: tomato) {
+  /* Define variables */
+  $direction: null;
+  $opposite-side: null;
+  $origin: null;
+
+  @if $side == top or $side == bottom {
+    $direction: vertical;
+    $opposite-side: if($side == top, bottom, top);
+    $origin: left;
+  }
+  @else if $side == right or $side == left {
+    $direction: horizontal;
+    $opposite-side: if($side == right, left, right);
+    $origin: top;
+  }
+
+  /* Tooltip's "container" */
+  background-color: $background-color;
+  border: $border-width solid $border-color;
+  position: absolute;
+
+  /* Tooltip's arrow and its border */
+  &:before, &:after {
+    content: '';
+    position: absolute;
+    #{$opposite-side}: 100%;
+    #{$origin}: $position;
+  }
+
+  /* Tooltip's arrow */
+  &:after {
+    border: ($arrow-width / 2) solid transparent;
+    border-#{$opposite-side}: ($arrow-width / 2) solid $background-color;
+    transform: translate(if($direction == vertical, ((- $arrow-width / 2), 0), (0, (- $arrow-width / 2))));
+  }
+
+  /* Tooltip's arrow's border */
+  &:before {
+    border: ($arrow-width / 2 + $border-width * 2) solid transparent;
+    border-#{$opposite-side}: ($arrow-width / 2 + $border-width * 2) solid $border-color;
+    transform: translate(if($direction == vertical, ((- $arrow-width / 2 - $border-width * 2), 0), (0, (- $arrow-width / 2 - $border-width * 2))));
+  }
+}
